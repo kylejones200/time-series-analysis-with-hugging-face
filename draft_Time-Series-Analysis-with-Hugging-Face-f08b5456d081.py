@@ -178,7 +178,7 @@ def visualize_results(y_true, y_pred, class_names=['Class 0', 'Class 1']):
     axes[1].set_title('Accuracy by Class', fontsize=14)
     axes[1].set_ylabel('Accuracy', fontsize=12)
     axes[1].set_ylim([0, 1])
-        for i, acc in enumerate(class_accuracies):
+    for i, acc in enumerate(class_accuracies):
         axes[1].text(i, acc + 0.02, f'{acc:.3f}', 
                     ha='center', fontsize=11, fontweight='bold')
     
