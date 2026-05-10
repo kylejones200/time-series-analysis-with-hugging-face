@@ -152,39 +152,40 @@ def evaluate_model(trainer, test_dataset, test_labels):
     return predicted_labels, accuracy
 
 
-def visualize_results(y_true, y_pred, class_names=['Class 0', 'Class 1']):
+def visualize_results(y_true, y_pred, class_names=['Class 0', 'Class 1'], plot: bool = False):
     """Create visualization of classification results."""
-    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+    if plot:
+        fig, axes = plt.subplots(1, 2, figsize=(14, 5))
     
     # Confusion matrix
-    cm = confusion_matrix(y_true, y_pred)
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=axes[0],
-                xticklabels=class_names, yticklabels=class_names)
-    axes[0].set_title('Confusion Matrix', fontsize=14)
-    axes[0].set_ylabel('True Label', fontsize=12)
-    axes[0].set_xlabel('Predicted Label', fontsize=12)
+        cm = confusion_matrix(y_true, y_pred)
+        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=axes[0],
+                    xticklabels=class_names, yticklabels=class_names)
+        axes[0].set_title('Confusion Matrix', fontsize=14)
+        axes[0].set_ylabel('True Label', fontsize=12)
+        axes[0].set_xlabel('Predicted Label', fontsize=12)
     
     # Classification accuracy by class
-    class_accuracies = []
-    for i in range(len(class_names)):
-        mask = y_true == i
-        if mask.sum() > 0:
-            acc = (y_pred[mask] == i).sum() / mask.sum()
-            class_accuracies.append(acc)
-        else:
-            class_accuracies.append(0)
+        class_accuracies = []
+        for i in range(len(class_names)):
+            mask = y_true == i
+            if mask.sum() > 0:
+                acc = (y_pred[mask] == i).sum() / mask.sum()
+                class_accuracies.append(acc)
+            else:
+                class_accuracies.append(0)
     
-    axes[1].bar(class_names, class_accuracies, color=['skyblue', 'lightcoral'])
-    axes[1].set_title('Accuracy by Class', fontsize=14)
-    axes[1].set_ylabel('Accuracy', fontsize=12)
-    axes[1].set_ylim([0, 1])
-    for i, acc in enumerate(class_accuracies):
-        axes[1].text(i, acc + 0.02, f'{acc:.3f}', 
-                    ha='center', fontsize=11, fontweight='bold')
+        axes[1].bar(class_names, class_accuracies, color=['skyblue', 'lightcoral'])
+        axes[1].set_title('Accuracy by Class', fontsize=14)
+        axes[1].set_ylabel('Accuracy', fontsize=12)
+        axes[1].set_ylim([0, 1])
+        for i, acc in enumerate(class_accuracies):
+            axes[1].text(i, acc + 0.02, f'{acc:.3f}', 
+                        ha='center', fontsize=11, fontweight='bold')
     
-    plt.tight_layout()
-    plt.savefig('huggingface_timeseries_classification.png', dpi=300)
-    plt.close()
+        plt.tight_layout()
+        plt.savefig('huggingface_timeseries_classification.png', dpi=300)
+        plt.close()
 
 
 def main():
