@@ -1,6 +1,6 @@
 # Time Series Analysis with Hugging Face
 
-**⚠️ Requires**: `transformers`, `datasets`, `torch` libraries
+⚠️ Requires: `transformers`, `datasets`, `torch` libraries
 
 ## Introduction
 
@@ -10,18 +10,18 @@ Hugging Face is best known for its natural language processing tools, but its tr
 
 Hugging Face provides a rich platform for sequence modeling naturally suited to time series problems:
 
-- **Transformer Architecture**: Captures dependencies across long sequences
-- **Transfer Learning**: Pre-trained models fine-tune quickly
-- **Multivariate Support**: Handles multiple time series types
-- **Flexibility**: Compatible with PyTorch and TensorFlow
+- Transformer Architecture: Captures dependencies across long sequences
+- Transfer Learning: Pre-trained models fine-tune quickly
+- Multivariate Support: Handles multiple time series types
+- Flexibility: Compatible with PyTorch and TensorFlow
 
 ## Adapting Transformers for Time Series
 
 ### Key Modifications
 
-1. **Tokenization**: Convert numerical sequences to string format
-2. **Positional Encoding**: Retain temporal order information
-3. **Fine-tuning**: Adapt pre-trained models to time series tasks
+1. Tokenization: Convert numerical sequences to string format
+2. Positional Encoding: Retain temporal order information
+3. Fine-tuning: Adapt pre-trained models to time series tasks
 
 ## Time Series Classification Example
 
@@ -152,15 +152,15 @@ Mask known values during training, model predicts based on surrounding sequence.
 
 ## Advantages
 
-- **Transfer Learning**: Pre-trained models carry useful representations
-- **Scalability**: Handle large datasets and long sequences
-- **Flexibility**: Support forecasting, classification, anomaly detection
+- Transfer Learning: Pre-trained models carry useful representations
+- Scalability: Handle large datasets and long sequences
+- Flexibility: Support forecasting, classification, anomaly detection
 
 ## Challenges
 
-- **Token Limits**: Long series may need truncation or batching
-- **Computational Cost**: Requires GPUs/TPUs for training
-- **Data Representation**: Numerical to text conversion may reduce precision
+- Token Limits: Long series may need truncation or batching
+- Computational Cost: Requires GPUs/TPUs for training
+- Data Representation: Numerical to text conversion may reduce precision
 
 ## Key Takeaways
 
@@ -171,10 +171,10 @@ Mask known values during training, model predicts based on surrounding sequence.
 
 ## Resources
 
-- **Hugging Face Documentation**: https://huggingface.co/docs
-- **Transformers Library**: https://github.com/huggingface/transformers
-- **Time Series Datasets**: https://huggingface.co/datasets
+- Hugging Face Documentation: https://huggingface.co/docs
+- Transformers Library: https://github.com/huggingface/transformers
+- Time Series Datasets: https://huggingface.co/datasets
 
 ---
 
-**Note**: This article demonstrates concepts. Production use requires careful hyperparameter tuning, validation, and computational resources.
+Note: This article demonstrates concepts. Production use requires careful hyperparameter tuning, validation, and computational resources.
