@@ -152,7 +152,9 @@ def evaluate_model(trainer, test_dataset, test_labels):
     return predicted_labels, accuracy
 
 
-def visualize_results(y_true, y_pred, class_names=['Class 0', 'Class 1'], plot: bool = False):
+def visualize_results(y_true, y_pred, class_names=None, plot: bool = False):
+    if class_names is None:
+        class_names = ['Class 0', 'Class 1']
     """Create visualization of classification results."""
     if plot:
         fig, axes = plt.subplots(1, 2, figsize=(14, 5))
@@ -171,9 +173,9 @@ def visualize_results(y_true, y_pred, class_names=['Class 0', 'Class 1'], plot: 
             mask = y_true == i
             if mask.sum() > 0:
                 acc = (y_pred[mask] == i).sum() / mask.sum()
-                class_accuracies.append(acc)
+                pd.concat([class_accuracies, acc])
             else:
-                class_accuracies.append(0)
+                pd.concat([class_accuracies, 0])
     
         axes[1].bar(class_names, class_accuracies, color=['skyblue', 'lightcoral'])
         axes[1].set_title('Accuracy by Class', fontsize=14)
