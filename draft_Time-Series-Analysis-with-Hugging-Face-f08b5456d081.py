@@ -190,9 +190,7 @@ def visualize_results(y_true, y_pred, class_names=['Class 0', 'Class 1'], plot: 
 
 def main():
     """Run complete example."""
-    logger.info("=" * 60)
     logger.info("Time Series Classification with Hugging Face")
-    logger.info("=" * 60)
     
     # Step 1: Install required libraries (shown in comments)
     # pip install transformers datasets torch scikit-learn
@@ -255,9 +253,7 @@ def main():
     visualize_results(test_labels, predicted_labels)
     logger.info("   Saved visualization to 'huggingface_timeseries_classification.png'")
     
-    logger.info("\n" + "=" * 60)
-    logger.info("Example completed successfully!")
-    logger.info("=" * 60)
+    logger.info("=== Example completed successfully! ===")
     logger.info("\nNote: This example demonstrates how to adapt Hugging Face")
     logger.info("transformers for time series classification. The same approach")
     logger.info("can be extended to forecasting, anomaly detection, and imputation tasks.")
