@@ -179,9 +179,9 @@ def visualize_results(y_true, y_pred, class_names=None, plot: bool = False):
             mask = y_true == i
             if mask.sum() > 0:
                 acc = (y_pred[mask] == i).sum() / mask.sum()
-                pd.concat([class_accuracies, acc])
+                class_accuracies.append(acc)
             else:
-                pd.concat([class_accuracies, 0])
+                class_accuracies.append(0)
 
         axes[1].bar(class_names, class_accuracies, color=["skyblue", "lightcoral"])
         axes[1].set_title("Accuracy by Class", fontsize=14)
