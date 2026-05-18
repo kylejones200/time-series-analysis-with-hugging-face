@@ -1,3 +1,5 @@
+import logging
+
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
@@ -6,7 +8,7 @@ from sklearn.model_selection import TimeSeriesSplit
 from torch.utils.data import Dataset
 from transformers import AutoTokenizer, BertForSequenceClassification, Trainer, TrainingArguments
 
-
+logger = logging.getLogger(__name__)
 class TimeSeriesDataset(Dataset):
     """Custom PyTorch Dataset for time series classification."""
 
@@ -33,7 +35,6 @@ def evaluate_model(trainer, test_dataset, test_labels):
 def generate_time_series_data(n_samples=200, n_timesteps=50, seed=42):
     """
     Generate synthetic time series data with two distinct classes.
-
     Parameters:
     -----------
     n_samples : int
@@ -62,7 +63,6 @@ def generate_time_series_data(n_samples=200, n_timesteps=50, seed=42):
 def tokenize_time_series(series, tokenizer, max_length=128):
     """
     Convert time series to tokenized format for transformer models.
-
     Parameters:
     -----------
     series : array-like
@@ -150,86 +150,48 @@ def visualize_results(y_true, y_pred, class_names=None, plot: bool = False):
 
 def step_2_prepare_the_time_series_data() -> None:
     "Run complete example."
-
     logger.info("Time Series Classification with Hugging Face")
-
     logger.info("\n1. Generating synthetic time series data...")
-
     X, y = generate_time_series_data(n_samples=200, n_timesteps=50)
-
     logger.info(f"   Generated {len(X)} samples with {X.shape[1]} timesteps each")
-
     logger.info(f"   Class distribution: {np.bincount(y)}")
-
     logger.info("\n2. Tokenizing time series data...")
-
     tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
-
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
     tokens = [tokenize_time_series(series, tokenizer) for series in X]
-
     logger.info(f"   Tokenized {len(tokens)} sequences")
-
     logger.info("\n3. Splitting data into train and test sets...")
-
     tscv = TimeSeriesSplit(n_splits=5)
-
     indices = np.arange(len(tokens))
-
     train_idx, test_idx = list(tscv.split(indices))[-1]
-
     train_tokens = [tokens[i] for i in train_idx]
-
     test_tokens = [tokens[i] for i in test_idx]
-
     train_labels = y[train_idx]
-
     test_labels = y[test_idx]
-
     logger.info(f"   Training samples: {len(train_tokens)}")
-
     logger.info(f"   Test samples: {len(test_tokens)}")
-
     train_dataset = TimeSeriesDataset(train_tokens, train_labels)
-
     test_dataset = TimeSeriesDataset(test_tokens, test_labels)
-
     logger.info("\n4. Loading pre-trained BERT model...")
-
     model = BertForSequenceClassification.from_pretrained("bert-base-uncased", num_labels=2)
-
-    logger.info(f"   Model parameters: {sum((p.numel() for p in model.parameters())):,}")
-
+    logger.info(f"   Model parameters: {sum(p.numel() for p in model.parameters()):,}")
     logger.info("\n5. Training model...")
-
     trainer = train_model(model, train_dataset, test_dataset)
-
     logger.info("\n6. Evaluating model...")
-
     predicted_labels, accuracy = evaluate_model(trainer, test_dataset, test_labels)
-
     logger.info(f"\n   Test Accuracy: {accuracy:.4f}")
-
     logger.info("\n   Classification Report:")
-
     logger.info(
         classification_report(test_labels, predicted_labels, target_names=["Class 0", "Class 1"])
     )
-
     logger.info("\n7. Creating visualizations...")
-
     visualize_results(test_labels, predicted_labels)
-
     logger.info("   Saved visualization to 'huggingface_timeseries_classification.png'")
-
     logger.info("=== Example completed successfully! ===")
-
     logger.info("\nNote: This example demonstrates how to adapt Hugging Face")
-
     logger.info("transformers for time series classification. The same approach")
-
     logger.info("can be extended to forecasting, anomaly detection, and imputation tasks.")
 
 
