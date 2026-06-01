@@ -3,11 +3,13 @@ import logging
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+import torch
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.model_selection import TimeSeriesSplit
 from torch.utils.data import Dataset
 from transformers import AutoTokenizer, BertForSequenceClassification, Trainer, TrainingArguments
 
+logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
 class TimeSeriesDataset(Dataset):
     """Custom PyTorch Dataset for time series classification."""
@@ -20,8 +22,9 @@ class TimeSeriesDataset(Dataset):
         return len(self.labels)
 
     def __getitem__(self, idx):
-        token_dict = {key: val.squeeze() for key, val in self.tokens[idx].items()}
-        return (token_dict, self.labels[idx])
+        token_dict = {key: val.squeeze(0) for key, val in self.tokens[idx].items()}
+        token_dict["labels"] = torch.tensor(self.labels[idx], dtype=torch.long)
+        return token_dict
 
 
 def evaluate_model(trainer, test_dataset, test_labels):
@@ -92,16 +95,16 @@ def train_model(model, train_dataset, eval_dataset, output_dir="./results"):
     """Train the transformer model."""
     training_args = TrainingArguments(
         output_dir=output_dir,
-        evaluation_strategy="epoch",
-        num_train_epochs=3,
+        eval_strategy="epoch",
+        num_train_epochs=1,
         per_device_train_batch_size=16,
         per_device_eval_batch_size=16,
-        warmup_steps=100,
+        warmup_steps=10,
         weight_decay=0.01,
-        logging_dir="./logs",
         logging_steps=10,
         save_strategy="epoch",
         load_best_model_at_end=True,
+        report_to="none",
     )
     trainer = Trainer(
         model=model, args=training_args, train_dataset=train_dataset, eval_dataset=eval_dataset
@@ -183,8 +186,12 @@ def step_2_prepare_the_time_series_data() -> None:
     predicted_labels, accuracy = evaluate_model(trainer, test_dataset, test_labels)
     logger.info(f"\n   Test Accuracy: {accuracy:.4f}")
     logger.info("\n   Classification Report:")
+    labels = sorted(set(test_labels.tolist()) | set(predicted_labels.tolist()))
+    target_names = [f"Class {i}" for i in labels]
     logger.info(
-        classification_report(test_labels, predicted_labels, target_names=["Class 0", "Class 1"])
+        classification_report(
+            test_labels, predicted_labels, labels=labels, target_names=target_names
+        )
     )
     logger.info("\n7. Creating visualizations...")
     visualize_results(test_labels, predicted_labels)

@@ -9,14 +9,7 @@ Hugging Face is best known for its natural language processing tools, but its tr
 
 This chapter introduces Hugging Face in the context of time series analysis. It explains the motivation for using transformers for sequential data, outlines key modeling techniques, and walks through a full example of time series classification. The goal is to show how the tools built for NLP can be applied to numerical sequence modeling with minimal adjustment.
 
-## About
 
-Place the code for this article in this repository.
-The original article export is saved as `article.md`.
-
-## Files
-
-Add your `.ipynb`, `.py`, `.yaml`, `.js`, `.ts`, or other project files here.
 
 ## Disclaimer
 
